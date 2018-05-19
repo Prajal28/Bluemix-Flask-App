@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello World</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+      <h1>Prajal Mishra</h1>
+      <h2>1001434611 </h2>
+        
+        <p id="response" class="lead text-center"></p>
+
+        <p id="databaseNames" class="lead text-center"></p>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="static/antixss.js" type="text/javascript"></script>
+
+    <script>
+    	//Submit data when enter key is pressed
+        $('#user_name').keydown(function(e) {
+        	var name = $('#user_name').val();
+            if (e.which == 13 && name.length > 0) { //catch Enter key
+            	//POST request to API to create a new visitor entry in the database
+                $.ajax({
+				  method: "POST",
+				  url: "./api/visitors",
+				  contentType: "application/json",
+				  data: JSON.stringify({name: name })
+				})
+                .done(function(data) {
+                    $('#response').html(AntiXSS.sanitizeInput(data));
+                    $('#nameInput').hide();
+                    getNames();
+                });
+            }
+        });
+
+        //Retreive all the visitors from the database
+        function getNames(){
+          $.get("./upload")
+              .done(function(data) {
+                  if(data.length > 0) {
+                    data.forEach(function(element, index) {
+                      data[index] = AntiXSS.sanitizeInput(element)
+                    });
+                    $('#databaseNames').html("Database contents: " + JSON.stringify(data));
+                  }
+              });
+          }
+
+          //Call getNames on page load.
+          getNames();
+		  
+		  
+
+
+    </script>
+	<h3>Display Files</h3>
+     <form id ="list_form" action="/list_files" method="GET">
+          <input id="keyword" type="text" name="keyword" />
+
+         <input type="Submit" name="list_files" value="Display">
+     </form>
+	
+	<h3>Upload File</h3>
+   <form id="upload_form" action="/upload" method="POST" enctype="multipart/form-data">
+         Choose File to upload from local to cloud:
+      <input type="file" name="file" class="form-control" accept="uploaded_files/*" multiple>
+	  <br>
+	  Created Date: <input id="cdate" type="text" name="cdate" />
+    <br>
+    Title: <input id="title" type="text" name="title" />
+    <br>
+    Description: <input id="description" type="text" name="descr" />
+	  <br>
+	  Creator: <input id="creator" type="text" name="creator" />
+	  <br>
+	  <br>
+	  <br>
+      <input type="radio" name="file_t" value="large"/>Large File (>2mb)
+    
+	  <br>
+      <input type="radio" name="file_t" value="small"/>Small File (<2mb)
+	  <br>
+      <input type="submit" name="upload" value="Upload">
+	  
+	  
+   </form>
+   {{ mesg }}
+   <!-- Total Time: {{ totaltime }}
+   Server Time: {{ servertime}} -->
+  
+         </div>
+
+
+<!-- <h2>Downloading Files from Cloud</h2>
+     <form id ="download_form" action="/download" method="POST">
+	  <br>
+	  <input id="dname" type="text" name="dname" />
+	  <br>
+	 
+         <input type="Submit" name="download" value="Download">
+     </form>
+	 
+ --><h3>Specify Keyword to search in title:</h3>
+     <form id ="download1_form" action="/downloadkey" method="POST">
+	  
+	  <input id="keyword" type="text" name="keyword" />
+	  <br>
+	 
+         <input type="Submit" name="download" value="Search">
+     </form>
+
+<!-- <h2>Deleting Files from Cloud</h2>
+     <form id ="delete_form" action="/delete" method="POST">
+	  <br>
+	  <input id="deletefn" type="text" name="deletefn" />
+	  <br>
+	 
+         <input type="submit" name="delete" value="Delete">
+     </form>
+ -->	 {{ res }}
+	 
+
+ 	 
+</body>
+
+</html>

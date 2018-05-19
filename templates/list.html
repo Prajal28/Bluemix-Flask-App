@@ -1,0 +1,47 @@
+<!-- poonam pardeshi 1001390231-->
+<html>
+
+  <h1>Prajal Mishra</h1>
+		<h2>1001434611</h2>
+  
+<!--   FILE LIST (SMALL FILES):
+ -->  <br>
+	 <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>File name</th>
+    <th>Description</th>
+    <th>Created Date</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for i in range (0,count) %}
+    <tr>
+    <td>{{ L[i] }}</td>
+    <td>{{ desc[i] }}</td>
+    <td>{{ desc[i] }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<!-- 	{% for i in range (0,count) %}
+               {{ L[i] }}
+			   <br>
+              {% endfor %}
+			  <br>
+			  <br>
+ FILE LIST (LARGE FILES):
+  <br>
+	{% for i in range (0,count) %}
+               {{ M[i] }}
+			   <br>
+              {% endfor %}
+ -->	
+ <br>
+ BM Time: {{ bmtime }} mSec
+ <br>
+ Waittime: {{ waittime }} mSec
+	
+
+	
+</html>
